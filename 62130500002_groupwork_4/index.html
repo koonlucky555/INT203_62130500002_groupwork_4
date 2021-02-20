@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet" />
+    <script src="https://unpkg.com/vue@next"></script>
+    <style>
+        .modal {
+            transition: opacity 0.25s ease;
+        }
+
+        body.modal-active {
+            overflow-x: hidden;
+            overflow-y: visible !important;
+        }
+
+        @font-face {
+            font-family: "tungstenBold";
+            src: url("font/Tungsten-Bold.ttf");
+        }
+
+        .tungsten {
+            font-family: "tungstenBold";
+            color: #ff4655;
+        }
+
+        .close {
+            color: #aaaaaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover {
+            color: #000;
+            text-decoration: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="app">
+        <!-- main -->
+        <div class="bg-gray-100 p-16 ">
+
+            <!-- Head -->
+            <div class="p-6">
+                <h2 class="uppercase tungsten text-8xl">MAPS Gallery ({{countUndone}})</h2>
+                <h3 class="uppercase tungsten text-3xl">Like ({{countLike}})</h3>
+                <div class="flex justify-end -mt-24">
+                    <span :class="{'hidden' : form.search} "><i class="fas fa-search " @click="search"></i></span>
+                    <span :class="{'hidden' : !form.search}">
+                        <input class="px-2 border-2 border-black mx-2 "
+                            placeholder="Please enter text for searching photos" v-model="form.text">
+                        <button class="mx-2 rouned text-white px-4 py-2 bg-red-500" @click="search">Cancel</button>
+                    </span>
+                </div>
+            </div>
+
+
+            <!-- modal -->
+            <div v-if="modal" class="flex items-center animated fadeIn fixed z-50  overflow-auto inset-0 bg-white bg-opacity-30">
+                <div class="animated fixed  max-w-md md:relative  m-auto justify-end w-full  flex flex-col ">
+                    <button @click="toggleModal" class="focus:outline-none"><span class="close ">&times;</span></button>
+                    <img class="my-auto" :src="imageModal"  alt="">
+                </div>
+            </div>
+
+            <!-- Photo -->
+            <div class="grid grid-cols-3 mt-20">
+                <div v-if="searching.length !== 0 " v-for="(images , index) in searching">
+                    <div class="bg-white rounded mx-auto max-w-xs rounded overflow-hidden shadow-lg my-3">
+                        <button id="myBtn"><img v-on:click="toggleModal(images)" class="rounded-t-lg" :src="images.images"
+                                alt="Vilage"></button>
+                        <div class="p-6">
+                            <h2 class="my-2 text-2xl font-bold text-black uppercase"> {{images.title}} &nbsp
+                                <i v-show="!images.heart "
+                                    class="far fa-x fa-heart text-black hover:text-red-600 transition duration-500 "
+                                    @click="like(images)"></i>
+                                <i v-show="images.heart " class="fas fa-x fa-heart text-red-500 transition duration-500 "
+                                    @click="like(images)"></i>
+                            </h2>
+                            <p class="mb-2 text-gray-500"> {{images.text}}</p>
+                        </div>
+                    </div>
+
+                </div>
+                <div v-else class="mt-10 bg-white shadow-lg rounded w-full mx-auto px-auto py-5 flex justify-center">
+                    <h2 class="mb-2 text-2xl font-bold text-gray-800">No Photos.</h2>
+                </div>
+            </div>
+
+
+
+        </div>
+
+    </div>
+
+    <!-- my main.js -->
+
+    <script src="main.js">
+    </script>
+
+</body>
+
+</html>
